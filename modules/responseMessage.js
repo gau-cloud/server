@@ -22,7 +22,7 @@ module.exports = {
     DELETE_POST_COMMENT_LIKE_SUCCESS:"게시글 댓글 해제 성공",
     GET_USER_POST_SUCCESS:"유저가 작성한 게시글 조회 성공",
     GET_USER_LIKE_POST_SUCCESS:"유저가 좋아요 한 게시글 조회 성공",
-
+    GET_POST_COMMENTS_SUCCESS:"댓글 가져오기 성공",
 
 
 

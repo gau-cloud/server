@@ -40,14 +40,14 @@ const post = {
 
         const result = await Post.getPostArrangedByLikesCount(month)
 
-        for(var i in result){
-            result[i].comments = await Post.getPostComments(i+1,userIdx)
-            if(await Post.checkPostLikes(result[i].post_idx,userIdx)){
-                result[i].post_likes = true
-            }else{
-                result[i].post_likes = false
-            }   
-        }
+        // for(var i in result){
+        //     result[i].comments = await Post.getPostComments(i+1,userIdx)
+        //     if(await Post.checkPostLikes(result[i].post_idx,userIdx)){
+        //         result[i].post_likes = true
+        //     }else{
+        //         result[i].post_likes = false
+        //     }   
+        // }
 
         return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.GET_POST_SUCCESS,{
             data:result
@@ -63,14 +63,14 @@ const post = {
 
         const result = await Post.getPostArrangedByCreatedAt(month)
 
-        for(var i in result){
-            result[i].comments = await Post.getPostComments(i+1,userIdx)
-            if(await Post.checkPostLikes(result[i].post_idx,userIdx)){
-                result[i].postLikes = true
-            }else{
-                result[i].postLikes = false
-            }   
-        }
+        // for(var i in result){
+        //     result[i].comments = await Post.getPostComments(i+1,userIdx)
+        //     if(await Post.checkPostLikes(result[i].post_idx,userIdx)){
+        //         result[i].postLikes = true
+        //     }else{
+        //         result[i].postLikes = false
+        //     }   
+        // }
 
         return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.GET_POST_SUCCESS,{
             data:result
@@ -228,6 +228,27 @@ const post = {
         return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.DELETE_POST_COMMENT_SUCCESS,{
             data:result
         }))
+    },
+    getPostComments:async(req,res)=>{
+        const userIdx = req.idx
+        const postIdx = req.params.postIdx;
+
+                // for(var i in result){
+        //     result[i].comments = await Post.getPostComments(i+1,userIdx)
+        //     if(await Post.checkPostLikes(result[i].post_idx,userIdx)){
+        //         result[i].postLikes = true
+        //     }else{
+        //         result[i].postLikes = false
+        //     }   
+        // }
+
+        const result = await Post.getPostComments(postIdx,userIdx);
+        console.log(result)
+
+        return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.GET_POST_COMMENTS_SUCCESS,{
+            data:result
+        }))
+
     }
 }
 

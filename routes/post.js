@@ -23,7 +23,7 @@ router.delete('/:postIdx',authUtil,postController.deletePost)
 router.post('/like/:postIdx',authUtil,postController.createPostLike)
 
 // 11. 게시글 좋아요 해제
-router.post('/dislike/:postIdx',authUtil,postController.deletePostLike)
+router.delete('/dislike/:postIdx',authUtil,postController.deletePostLike)
 
 // 12. 게시글 댓글 달기
 router.post('/comment',authUtil,postController.createPostComment)
@@ -40,6 +40,7 @@ router.post('/comments/like/:postCommentsIdx',authUtil,postController.createPost
 // 16. 게시글 댓글 좋아요 해제
 router.delete('/comments/dislike/:postCommentsIdx',authUtil,postController.deletePostCommentLike)
 
-
+// 17. 개별 게시글
+router.get('/comments/:postIdx',authUtil,postController.getPostComments)
 
 module.exports = router;

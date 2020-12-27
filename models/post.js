@@ -40,21 +40,22 @@ const post ={
         `SELECT post_comments_idx,name,description,post_comments.created_at,likes FROM post_comments JOIN user ON post_comments.user_idx=user.user_idx WHERE post_idx=${postIdx} ORDER BY created_at DESC;`
         try{
             const result = await pool.queryParam(query);
-            for(var i in result){
-                const postCommentsLikesCheckQuery = `SELECT * FROM ${table_post_comments_likes} WHERE post_comments_idx=${result[i].post_comments_idx} AND user_idx=${userIdx}`
-                const Queryresult = await pool.queryParam(postCommentsLikesCheckQuery)
-                let flag;
-                if(Queryresult==null||Queryresult==undefined||Queryresult==""){
-                    flag=false
-                }else{
-                    flag=true
-                }
-                if(flag){
-                    result[i].post_comments_likes=true;
-                }else{
-                    result[i].post_comments_likes=false;
-                }
-            }
+            // for(var i in result){
+            //     let post_comments_idx = BigInt(result[i].post_comments_idx)
+            //     const postCommentsLikesCheckQuery = `SELECT * FROM ${table_post_comments_likes} WHERE post_comments_idx=${post_comments_idx} AND user_idx=${userIdx}`
+            //     const Queryresult = await pool.queryParam(postCommentsLikesCheckQuery)
+            //     let flag;
+            //     if(Queryresult==null||Queryresult==undefined||Queryresult==""){
+            //         flag=false
+            //     }else{
+            //         flag=true
+            //     }
+            //     if(flag){
+            //         result[i].post_comments_likes=true;
+            //     }else{
+            //         result[i].post_comments_likes=false;
+            //     }
+            // }
             return result;
         }catch(err){
             throw err;
@@ -98,7 +99,7 @@ const post ={
         const query = `UPDATE ${table_post} SET title="${title}", description="${description}" WHERE post_idx=${postIdx}`
         try{
             const result = await pool.queryParam(query)
-            return result;
+            return result.protocol41;
         }
         catch(err){
             throw err;
