@@ -40,14 +40,14 @@ const post = {
 
         const result = await Post.getPostArrangedByLikesCount(month)
 
-        // for(var i in result){
-        //     result[i].comments = await Post.getPostComments(i+1,userIdx)
-        //     if(await Post.checkPostLikes(result[i].post_idx,userIdx)){
-        //         result[i].post_likes = true
-        //     }else{
-        //         result[i].post_likes = false
-        //     }   
-        // }
+        for(var i in result){
+            // result[i].comments = await Post.getPostComments(i+1,userIdx)
+            // if(await Post.checkPostLikes(result[i].post_idx,userIdx)){
+            //     result[i].post_likes = true
+            // }else{
+            //     result[i].post_likes = false
+            // }   
+        }
 
         return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.GET_POST_SUCCESS,{
             data:result
@@ -98,13 +98,14 @@ const post = {
         const postIdx = req.params.postIdx
         const userIdx = req.idx
 
-        console.log(!await Post.checkUser(postIdx,userIdx))
+        const intPostIdx = parseInt(postIdx)
+        const intUserIdx = parseInt(userIdx)
 
-        if(!await Post.checkUser(postIdx,userIdx)){
+        if(!await Post.checkUser(intPostIdx,intUserIdx)){
             return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST,resMessage.AUTH_FAIL));
         }
 
-        const result = await Post.deletePost(postIdx)
+        const result = await Post.deletePost(intPostIdx)
 
         return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.DELETE_POST_SUCCESS,{
             data:result

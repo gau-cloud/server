@@ -109,7 +109,7 @@ const post ={
         const query = `SELECT * FROM post_likes WHERE post_idx=${postIdx} AND user_idx=${userIdx}`
         try{
             const result = await pool.queryParam(query)
-            if(result==null||result==undefined||result==""){
+            if(result.length<1){
                 return false;
             }else{
                 return true;
