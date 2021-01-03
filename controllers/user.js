@@ -36,22 +36,24 @@ const user = {
         const {
             id,password
         } = req.body;
-
         
     if (!id || !password) {
         return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMsg.NULL_VALUE))
     }
 
+    console.log("service-a")
     if (await User.checkUser(id) === false) {
         return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMsg.DB_ERROR))
     }
 
-    const result = await User.signin(id, password)
+        console.log("service-b")
+        const result = await User.signin(id, password)
 
     if (result === false) {
         return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMsg.DB_ERROR))
     }
 
+    console.log("service-c")
     const userData = await User.getUserById(id)
     const jwtToken = await jwt.sign(userData[0])
 
@@ -65,7 +67,7 @@ const user = {
         const result = await Post.getUserLikePosts(userIdx)
 
         return res.status(statusCode.OK).send(util.success(statusCode.OK, resMessage.GET_USER_LIKE_POST_SUCCESS, {
-            result: result
+            post_list: result
         }))
     },
     getPostCommentsLikes:async(req,res)=>{
@@ -83,13 +85,13 @@ const user = {
         const result = await Post.getUserPosts(userIdx)
 
         return res.status(statusCode.OK).send(util.success(statusCode.OK, resMessage.GET_USER_POST_SUCCESS, {
-            result: result
+            post_list: result
         }))
     },
     test:async(req,res)=>{
         const result = await User.test();
         return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.ALREADY_ID,{
-            result:result
+            post_list:result
         }))
     }
 

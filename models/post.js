@@ -40,22 +40,22 @@ const post ={
         `SELECT post_comments_idx,name,description,post_comments.created_at,likes FROM post_comments JOIN user ON post_comments.user_idx=user.user_idx WHERE post_idx=${postIdx} ORDER BY created_at DESC;`
         try{
             const result = await pool.queryParam(query);
-            // for(var i in result){
-            //     let post_comments_idx = BigInt(result[i].post_comments_idx)
-            //     const postCommentsLikesCheckQuery = `SELECT * FROM ${table_post_comments_likes} WHERE post_comments_idx=${post_comments_idx} AND user_idx=${userIdx}`
-            //     const Queryresult = await pool.queryParam(postCommentsLikesCheckQuery)
-            //     let flag;
-            //     if(Queryresult==null||Queryresult==undefined||Queryresult==""){
-            //         flag=false
-            //     }else{
-            //         flag=true
-            //     }
-            //     if(flag){
-            //         result[i].post_comments_likes=true;
-            //     }else{
-            //         result[i].post_comments_likes=false;
-            //     }
-            // }
+            for(var i in result){
+                let post_comments_idx = BigInt(result[i].post_comments_idx)
+                const postCommentsLikesCheckQuery = `SELECT * FROM ${table_post_comments_likes} WHERE post_comments_idx=${post_comments_idx} AND user_idx=${userIdx}`
+                const Queryresult = await pool.queryParam(postCommentsLikesCheckQuery)
+                let flag;
+                if(Queryresult==null||Queryresult==undefined||Queryresult==""){
+                    flag=false
+                }else{
+                    flag=true
+                }
+                if(flag){
+                    result[i].post_comments_likes=true;
+                }else{
+                    result[i].post_comments_likes=false;
+                }
+            }
             return result;
         }catch(err){
             throw err;
@@ -96,10 +96,12 @@ const post ={
         }
     },
     updatePost:async(postIdx,title,description)=>{
-        const query = `UPDATE ${table_post} SET title="${title}", description="${description}" WHERE post_idx=${postIdx}`
+        let query = `UPDATE ${table_post} SET title="${title}", description="${description}" WHERE post_idx=${postIdx}`
         try{
+            await pool.queryParam(query)
+            query = `SELECT * FROM ${table_post} WHERE post_idx=${postIdx}`
             const result = await pool.queryParam(query)
-            return result.protocol41;
+            return result;
         }
         catch(err){
             throw err;
@@ -139,7 +141,11 @@ const post ={
             const likesCount = await pool.queryParam(queryGetLikesCountFromPost)
             const plusQuery = `UPDATE ${table_post} SET likes=${likesCount[0].likes}+1 WHERE post_idx=${postIdx}`
             const plusQueryResult = await pool.queryParam(plusQuery)
-            return insertResult.protocol41; 
+
+            const getPostLikesTable = `SELECT * FROM ${table_post_likes}`
+            const result = await pool.queryParam(getPostLikesTable)
+
+            return result; 
         }catch(err){
             throw err;
         }
@@ -152,25 +158,33 @@ const post ={
             const likesCount = await pool.queryParam(queryGetLikesCountFromPost)
             const minusQuery = `UPDATE ${table_post} SET likes=${likesCount[0].likes}-1 WHERE post_idx=${postIdx}`
             const minusQueryResult = await pool.queryParam(minusQuery)
-            return insertResult.protocol41
+
+            const getPostLikesTable = `SELECT * FROM ${table_post_likes}`
+            const result = await pool.queryParam(getPostLikesTable)
+
+            return result;
         }catch(err){
             throw err;
         }
     },
     createPostComment:async(postIdx,userIdx,description)=>{
-        const query = `INSERT INTO ${table_post_comments}(post_idx,user_idx,description) VALUES(${postIdx},${userIdx},'${description}')`
+        let query = `INSERT INTO ${table_post_comments}(post_idx,user_idx,description) VALUES(${postIdx},${userIdx},'${description}')`
         try{
             const result = await pool.queryParam(query)
-            return result.protocol41;
+            query = `SELECT * FROM ${table_post_comments} WHERE post_comments_idx=${result.insertId}`
+            const getInsertedData = await pool.queryParam(query)
+            return getInsertedData;
         }catch(err){
             throw err;
         }
     },
     updatePostComment:async(postCommentsIdx,description)=>{
-        const query = `UPDATE ${table_post_comments} SET description='${description}' WHERE post_comments_idx=${postCommentsIdx}`
+        let query = `UPDATE ${table_post_comments} SET description='${description}' WHERE post_comments_idx=${postCommentsIdx}`
         try{
             const result = await pool.queryParam(query)
-            return result.protocol41;
+            query = `SELECT * FROM ${table_post_comments} WHERE post_comments_idx=${postCommentsIdx}`
+            const getUpdatedPostComments = await pool.queryParam(query)
+            return getUpdatedPostComments;
         }catch(err){
             throw err;
         }
@@ -220,7 +234,10 @@ const post ={
             const likesCount = await pool.queryParam(queryGetLikesCountFromPostComments)
             const plusQuery = `UPDATE ${table_post_comments} SET likes=${likesCount[0].likes}+1 WHERE post_comments_idx=${postCommentsIdx}`
             const plusQueryResult = await pool.queryParam(plusQuery)
-            return result.protocol41
+
+            const getPostCommentsLikesTableQuery = `SELECT * FROM ${table_post_comments_likes}`
+            const getPostCommentsLikesTable = await pool.queryParam(getPostCommentsLikesTableQuery)
+            return getPostCommentsLikesTable
         }catch(err){
             throw err;
         }
@@ -233,7 +250,11 @@ const post ={
             const likesCount = await pool.queryParam(queryGetLikesCountFromPostComments)
             const miusQuery = `UPDATE ${table_post_comments} SET likes=${likesCount[0].likes}-1 WHERE post_comments_idx=${postCommentsIdx}`
             const miusQueryResult = await pool.queryParam(miusQuery)
-            return result.protocol41
+
+            const getPostCommentsLikesTableQuery = `SELECT * FROM ${table_post_comments_likes}`
+            const getPostCommentsLikesTable = await pool.queryParam(getPostCommentsLikesTableQuery)
+            return getPostCommentsLikesTable
+
         }catch(err){
             throw err;
         }

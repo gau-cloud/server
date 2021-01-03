@@ -1,6 +1,6 @@
 const poolPromise = require('../config/database');
 
-module.exports = { 
+module.exports = {
     queryParam: async (query) => {
         return new Promise ( async (resolve, reject) => {
             try {
@@ -8,10 +8,10 @@ module.exports = {
                 const connection = await pool.getConnection();
                 try {
                     const result = await connection.query(query);
-                    // pool.releaseConnection(connection);
+                    connection.release();
                     resolve(result);
                 } catch (err) {
-                    // pool.releaseConnection(connection);
+                    connection.release();
                     reject(err);
                 }
             } catch (err) {
@@ -26,10 +26,10 @@ module.exports = {
                 const connection = await pool.getConnection();
                 try {
                     const result = await connection.query(query, value);
-                    // pool.releaseConnection(connection);
+                    connection.release();
                     resolve(result);
                 } catch (err) {
-                    // pool.releaseConnection(connection);
+                    connection.release();
                     reject(err);
                 }
             } catch (err) {
@@ -46,11 +46,11 @@ module.exports = {
                     await connection.beginTransaction();
                     args.forEach(async (it) => await it(connection));
                     await connection.commit();
-                    // pool.releaseConnection(connection);
-                    resolve(result);
+                    connection.release();
+                    resolve();
                 } catch (err) {
                     await connection.rollback()
-                    // pool.releaseConnection(connection);
+                    connection.release();
                     reject(err);
                 }
             } catch (err) {

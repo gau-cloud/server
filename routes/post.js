@@ -14,7 +14,7 @@ router.get('/likes/:month',authUtil,postController.getPostArrangedByLikesCount)
 router.get('/newest/:month',authUtil,postController.getPostArrangedByCreatedAt)
 
 // 8. 게시글 수정
-router.put('/',authUtil,postController.updatePost)
+router.put('/:postIdx',authUtil,postController.updatePost)
 
 // 9. 게시글 삭제
 router.delete('/:postIdx',authUtil,postController.deletePost)
@@ -26,10 +26,10 @@ router.post('/like/:postIdx',authUtil,postController.createPostLike)
 router.delete('/dislike/:postIdx',authUtil,postController.deletePostLike)
 
 // 12. 게시글 댓글 달기
-router.post('/comment',authUtil,postController.createPostComment)
+router.post('/comment/:postIdx',authUtil,postController.createPostComment)
 
 // 13. 게시글 댓글 수정
-router.put('/comment',authUtil,postController.updatePostComment)
+router.put('/comment/:postCommentsIdx',authUtil,postController.updatePostComment)
 
 // 14. 게시글 댓글 삭제
 router.delete('/comment/:postCommentIdx',authUtil,postController.deletePostComment)

@@ -8,7 +8,7 @@ const user ={
         const fields = 'id,password,salt,name,data'
 
         const query = `INSERT INTO ${table_user}(${fields}) VALUES ('${id}','${hashedPw}','${salt}','${name}','${data}')`
-
+        console.log(query)
         try{
             const result = await pool.queryParam(query);
             return result
@@ -54,11 +54,7 @@ const user ={
                 return false;
             } else return true;
         } catch (error) {
-            if (error.errno = 1062) {
-                console.log('checkUser ERROR :', err.errno, err.code);
-                return -1;
-            }
-            console.log('checkUser :', error)
+           throw error;
         }
     },
     test:async()=>{
