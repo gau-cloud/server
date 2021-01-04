@@ -96,7 +96,7 @@ const user = {
     },
 
     getJwtAuth: async(req, res)=>{
-        if(!req.user) return res.json({ isAuth : false});
+        // if(!req.user) return res.json({ isAuth : false});
         return res.json({
             _id : req.user.idx,
             isAuth: true
