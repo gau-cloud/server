@@ -21,6 +21,6 @@ router.get('/post-mine',authUtil,userController.getPostOfUser)
 
 router.post('/jwtauth', authUtil, userController.getJwtAuth)
 
-router.get('/test',userController.test)
+router.get('/test',authUtil,userController.test)
 
 module.exports=router;
