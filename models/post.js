@@ -4,10 +4,15 @@ const table_post = 'post';
 const table_post_comments = 'post_comments'
 const table_post_comments_likes = 'post_comments_likes'
 const table_post_likes = 'post_likes'
+require('moment-timezone'); 
+var moment = require('moment');
+
+moment.tz.setDefault("Asia/Seoul"); 
+var dateSeoul = moment().format('YYYY-MM-DD HH:mm:ss'); 
 
 const post ={
     createPost: async (title,description,userIdx,data)=>{
-        const query = `INSERT INTO ${table_post}(title,description,user_idx,data) VALUES('${title}','${description}','${userIdx}','${data}')`
+        const query = `INSERT INTO ${table_post}(title,description,user_idx,data,created_at) VALUES('${title}','${description}','${userIdx}','${data}','${dateSeoul}')`
         try{
             const result = await pool.queryParam(query);
             return result.insertId;            
@@ -168,7 +173,7 @@ const post ={
         }
     },
     createPostComment:async(postIdx,userIdx,description)=>{
-        let query = `INSERT INTO ${table_post_comments}(post_idx,user_idx,description) VALUES(${postIdx},${userIdx},'${description}')`
+        let query = `INSERT INTO ${table_post_comments}(post_idx,user_idx,description,created_at) VALUES(${postIdx},${userIdx},'${description}','${dateSeoul}')`
         try{
             const result = await pool.queryParam(query)
             query = `SELECT * FROM ${table_post_comments} WHERE post_comments_idx=${result.insertId}`

@@ -2,13 +2,17 @@ const pool = require('../modules/pool');
 const table_user = 'user';
 const table_post = 'post';
 const crypto = require('crypto');
+require('moment-timezone'); 
+var moment = require('moment');
+
+moment.tz.setDefault("Asia/Seoul"); 
+var dateSeoul = moment().format('YYYY-MM-DD HH:mm:ss'); 
 
 const user ={
     signup:async(id,hashedPw,salt,name,data)=>{
-        const fields = 'id,password,salt,name,data'
+        const fields = 'id,password,salt,name,data,created_at'
 
-        const query = `INSERT INTO ${table_user}(${fields}) VALUES ('${id}','${hashedPw}','${salt}','${name}','${data}')`
-        console.log(query)
+        const query = `INSERT INTO ${table_user}(${fields}) VALUES ('${id}','${hashedPw}','${salt}','${name}','${data}','${dateSeoul}')`
         try{
             const result = await pool.queryParam(query);
             return result

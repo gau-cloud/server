@@ -13,6 +13,8 @@ router.get('/likes/:month',authUtil,postController.getPostArrangedByLikesCount)
 // 7. 게시글 불러오기 - 최신순
 router.get('/newest/:month',authUtil,postController.getPostArrangedByCreatedAt)
 
+// router.get('/all',authUtil,postController.getAllPost)
+
 // 8. 게시글 수정
 router.put('/:postIdx',authUtil,postController.updatePost)
 
