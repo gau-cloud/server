@@ -23,6 +23,8 @@ module.exports = {
     GET_USER_POST_SUCCESS:"유저가 작성한 게시글 조회 성공",
     GET_USER_LIKE_POST_SUCCESS:"유저가 좋아요 한 게시글 조회 성공",
     GET_POST_COMMENTS_SUCCESS:"댓글 가져오기 성공",
+    REQUIRE_AUTH:"인증 필요",
+    DONE_AUTH:"인증 됨",
 
 
 

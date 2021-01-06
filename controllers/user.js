@@ -41,19 +41,16 @@ const user = {
         return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST, responseMsg.NULL_VALUE))
     }
 
-    console.log("service-a")
     if (await User.checkUser(id) === false) {
         return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMsg.DB_ERROR))
     }
 
-        console.log("service-b")
         const result = await User.signin(id, password)
 
     if (result === false) {
         return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.INTERNAL_SERVER_ERROR, responseMsg.DB_ERROR))
     }
 
-    console.log("service-c")
     const userData = await User.getUserById(id)
     const jwtToken = await jwt.sign(userData[0])
 
@@ -96,11 +93,17 @@ const user = {
     },
 
     getJwtAuth: async(req, res)=>{
-        // if(!req.user) return res.json({ isAuth : false});
-        return res.json({
-            _id : req.user.idx,
-            isAuth: true
-        })
+        const userIdx = req.idx;
+
+        if(!userIdx){
+            return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST,resMessage.REQUIRE_AUTH,{
+                is_auth:false
+            }))
+        }else{
+            return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.DONE_AUTH,{
+                is_auth:true
+            }))
+        }
     }
 
 }

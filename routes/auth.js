@@ -21,7 +21,7 @@ router.get('/post-comments-likes',authUtil,userController.getPostCommentsLikes)
 // 5. 내가 올린 게시글 불러오기
 router.get('/post-mine',authUtil,userController.getPostOfUser)
 
-router.get('/jwtauth', authUtil, userController.getJwtAuth)
+router.post('/jwtauth', authUtil, userController.getJwtAuth)
 
 router.get('/test',authUtil,userController.test)
 
