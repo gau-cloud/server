@@ -25,6 +25,15 @@ const post ={
         `SELECT * FROM post WHERE MONTH(created_at) = ${month} ORDER BY likes DESC`
         try{
          const result = await pool.queryParam(query);
+
+         for(var i in result){
+             let userQuery = `SELECT * from ${table_user} WHERE user_idx='${result[i].user_idx}'`
+             let userInfo = await pool.queryParam(userQuery);
+             delete userInfo[0].salt
+             delete userInfo[0].password
+             result[i].userInfo = userInfo;
+             delete result[i].user_idx;
+         }
          return result;
         }catch(err){
             throw err;
@@ -35,6 +44,14 @@ const post ={
         `SELECT * FROM post WHERE MONTH(created_at) = ${month} ORDER BY created_at DESC`
         try{
          const result = await pool.queryParam(query);
+         for(var i in result){
+            let userQuery = `SELECT * from ${table_user} WHERE user_idx='${result[i].user_idx}'`
+            let userInfo = await pool.queryParam(userQuery);
+            delete userInfo[0].salt
+            delete userInfo[0].password
+            result[i].userInfo = userInfo;
+            delete result[i].user_idx;
+        }
          return result;
         }catch(err){
             throw err;
