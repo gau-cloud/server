@@ -254,15 +254,6 @@ const post = {
 
         const result = await Post.getPostComments(postIdx,userIdx);
 
-        for(var i in result){
-            result[i].comments = await Post.getPostComments(i+1,userIdx)
-            if(await Post.checkPostLikes(result[i].post_idx,userIdx)){
-                result[i].postLikes = true
-            }else{
-                result[i].postLikes = false
-            }   
-            }
-
         return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.GET_POST_COMMENTS_SUCCESS,{
             data:result
         }))

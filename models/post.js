@@ -46,9 +46,10 @@ const post ={
         try{
             const result = await pool.queryParam(query);
             for(var i in result){
-                let post_comments_idx = BigInt(result[i].post_comments_idx)
+                let post_comments_idx = result[i].post_comments_idx
                 const postCommentsLikesCheckQuery = `SELECT * FROM ${table_post_comments_likes} WHERE post_comments_idx=${post_comments_idx} AND user_idx=${userIdx}`
                 const Queryresult = await pool.queryParam(postCommentsLikesCheckQuery)
+                console.log(Queryresult)
                 let flag;
                 if(Queryresult==null||Queryresult==undefined||Queryresult==""){
                     flag=false
