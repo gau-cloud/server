@@ -28,10 +28,10 @@ const post ={
 
          for(var i in result){
              let userQuery = `SELECT * from ${table_user} WHERE user_idx='${result[i].user_idx}'`
-             let userInfo = await pool.queryParam(userQuery);
-             delete userInfo[0].salt
-             delete userInfo[0].password
-             result[i].userInfo = userInfo;
+             let user_info = await pool.queryParam(userQuery);
+             delete user_info[0].salt
+             delete user_info[0].password
+             result[i].user_info = user_info;
              delete result[i].user_idx;
          }
          return result;
@@ -46,10 +46,10 @@ const post ={
          const result = await pool.queryParam(query);
          for(var i in result){
             let userQuery = `SELECT * from ${table_user} WHERE user_idx='${result[i].user_idx}'`
-            let userInfo = await pool.queryParam(userQuery);
-            delete userInfo[0].salt
-            delete userInfo[0].password
-            result[i].userInfo = userInfo;
+            let user_info = await pool.queryParam(userQuery);
+            delete user_info[0].salt
+            delete user_info[0].password
+            result[i].user_info = user_info;
             delete result[i].user_idx;
         }
          return result;
@@ -66,7 +66,6 @@ const post ={
                 let post_comments_idx = result[i].post_comments_idx
                 const postCommentsLikesCheckQuery = `SELECT * FROM ${table_post_comments_likes} WHERE post_comments_idx=${post_comments_idx} AND user_idx=${userIdx}`
                 const Queryresult = await pool.queryParam(postCommentsLikesCheckQuery)
-                console.log(Queryresult)
                 let flag;
                 if(Queryresult==null||Queryresult==undefined||Queryresult==""){
                     flag=false
