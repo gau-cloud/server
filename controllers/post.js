@@ -41,7 +41,7 @@ const post = {
         const result = await Post.getPostArrangedByLikesCount(month)
 
         for(var i in result){
-            result[i].comments = await Post.getPostComments(i+1,userIdx)
+            result[i].comments = await Post.getPostComments(result[i].post_idx,userIdx)
             if(await Post.checkPostLikes(result[i].post_idx,userIdx)){
                 result[i].post_likes = true
             }else{
@@ -64,7 +64,7 @@ const post = {
         const result = await Post.getPostArrangedByCreatedAt(month)
 
         for(var i in result){
-            result[i].comments = await Post.getPostComments(i+1,userIdx)
+            result[i].comments = await Post.getPostComments(result[i].post_idx,userIdx)
             if(await Post.checkPostLikes(result[i].post_idx,userIdx)){
                 result[i].postLikes = true
             }else{
