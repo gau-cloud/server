@@ -26,7 +26,6 @@ const authUtil = {
     },
     jwtauth : async(req, res, next) => {
         let token = req.cookies.x_auth;
-
         // 토큰 없음
         if (!token)
         return res.json(util.fail(CODE.BAD_REQUEST, MSG.EMPTY_TOKEN));

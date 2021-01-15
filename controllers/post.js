@@ -98,14 +98,11 @@ const post = {
         const postIdx = req.params.postIdx
         const userIdx = req.idx
 
-        const intPostIdx = parseInt(postIdx)
-        const intUserIdx = parseInt(userIdx)
-
-        if(!await Post.checkUser(intPostIdx,intUserIdx)){
+        if(!await Post.checkUser(postIdx,userIdx)){
             return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST,resMessage.AUTH_FAIL));
         }
 
-        const result = await Post.deletePost(intPostIdx)
+        const result = await Post.deletePost(postIdx)
 
         return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.DELETE_POST_SUCCESS,{
             data:result
@@ -118,6 +115,8 @@ const post = {
         if(!await Post.checkPostIdx(postIdx)){
             return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST,resMessage.POST_NOT_EXIST));
         }
+
+        console.log(postIdx)
 
         // 좋아요 이미 돼있으면 중복 메세지 반환
         if(await Post.checkPostLikes(postIdx,userIdx)){
@@ -258,6 +257,38 @@ const post = {
             data:result
         }))
 
+    },
+    createNotice:async(req,res)=>{
+        const userIdx = req.idx;
+        const {description} = req.body;
+
+        if(!description){
+            return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST,resMessage.NULL_VALUE))
+        }
+
+        const result = await Post.createNotice(userIdx,description)
+
+        return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.CREATE_NOTICE_SUCCESS,{
+            data:result
+        }))
+    },
+    getNotice:async(req,res)=>{
+        const result = await Post.getNotice();
+
+        return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.GET_NOTICE_SUCCESS,{
+            data:result
+        }))
+
+    },
+    deleteNotice:async(req,res)=>{
+        const userIdx = req.idx;
+        const noticeIdx = req.params.noticeIdx;
+
+        const result = await Post.deleteNotice(noticeIdx);
+
+        return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.GET_NOTICE_SUCCESS,{
+            data:result
+        }))
     }
 }
 

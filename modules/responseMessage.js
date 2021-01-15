@@ -25,6 +25,9 @@ module.exports = {
     GET_POST_COMMENTS_SUCCESS:"댓글 가져오기 성공",
     REQUIRE_AUTH:"인증 필요",
     DONE_AUTH:"인증 됨",
+    CREATE_NOTICE_SUCCESS:"공지글 생성 성공",
+    GET_NOTICE_SUCCESS:"공지글 가져오기 성공",
+    DELETE_NOTICE_SUCCESS:"공지글 삭제 성공",
 
 
 

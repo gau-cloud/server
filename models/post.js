@@ -84,7 +84,7 @@ const post ={
         }
     },
     checkUser:async(postIdx,userIdx)=>{
-        const query = `SELECT user_idx from ${table_post} WHERE post_idx=${postIdx}`
+        const query = `SELECT user_idx from ${table_post} WHERE post_idx='${postIdx}'`
         try{
             const getUserIdx = await pool.queryParam(query)
             if(getUserIdx[0].user_idx===userIdx){
@@ -96,17 +96,16 @@ const post ={
             throw err;
         }
     },
+    //SET SQL_SAFE_UPDATES = 0;
+    
     deletePost:async(postIdx)=>{
         const queryPostCommentsLikes = 
         `
-        SET SQL_SAFE_UPDATES = 0;
-        DELETE ${table_post_comments_likes}
-        FROM post_comments_likes JOIN post_comments ON post_comments.post_comments_idx=post_comments_likes.post_comments_idx WHERE post_idx=${postIdx};
-        SET SQL_SAFE_UPDATES = 1;
+        DELETE ${table_post_comments_likes} FROM post_comments_likes JOIN post_comments ON post_comments.post_comments_idx=post_comments_likes.post_comments_idx WHERE post_idx='${postIdx}';
         `
-        const queryPostComments = `DELETE from ${table_post_comments} WHERE post_idx=${postIdx}`
-        const queryPostLikes = `DELETE from ${table_post_likes} WHERE post_idx=${postIdx}`
-        const queryPost = `DELETE from ${table_post} WHERE post_idx=${postIdx}`
+        const queryPostComments = `DELETE from ${table_post_comments} WHERE post_idx='${postIdx}'`
+        const queryPostLikes = `DELETE from ${table_post_likes} WHERE post_idx='${postIdx}'`
+        const queryPost = `DELETE from ${table_post} WHERE post_idx='${postIdx}'`
         try{
             const queryPostCommentsLikesResult = await pool.queryParam(queryPostCommentsLikes)
             const queryPostCommentsResult = await pool.queryParam(queryPostComments)
@@ -292,6 +291,33 @@ const post ={
     },
     getUserLikePosts:async(userIdx)=>{
         const query = `SELECT post.post_idx,title,description,data,likes,created_at FROM ${table_post_likes} JOIN ${table_post} ON post.post_idx=post_likes.post_idx;`
+        try{
+            const result = await pool.queryParam(query)
+            return result;
+        }catch(err){
+            throw err;
+        }
+    },
+    createNotice:async(userIdx,description)=>{
+        const query = `INSERT INTO notice (user_idx,description) VALUES(${userIdx},'${description}')`
+        try{
+            const result = await pool.queryParam(query)
+            return result.protocol41;
+        }catch(err){
+            throw err;
+        }
+    },
+    getNotice:async()=>{
+        const query = `SELECT * FROM notice`
+        try{
+            const result = await pool.queryParam(query)
+            return result;
+        }catch(err){
+            throw err;
+        }
+    },
+    deleteNotice:async(noticeIdx)=>{
+        const query = `DELETE FROM notice where notice_idx='${noticeIdx}'`
         try{
             const result = await pool.queryParam(query)
             return result;
