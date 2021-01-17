@@ -45,11 +45,13 @@ router.delete('/comments/dislike/:postCommentsIdx',authUtil,postController.delet
 // 17. 개별 게시글
 router.get('/comments/:postIdx',authUtil,postController.getPostComments)
 
-router.post('/notice',authUtil,postController.createNotice)
+router.post('/notice/:postIdx',authUtil,postController.createNotice)
 
-router.get('/notice',authUtil,postController.getNotice)
+// router.post('/notice',authUtil,postController.createNotice)
 
-router.delete('/notice/:noticeIdx',authUtil,postController.deleteNotice)
+// router.get('/notice',authUtil,postController.getNotice)
+
+// router.delete('/notice/:noticeIdx',authUtil,postController.deleteNotice)
 
 
 module.exports = router;

@@ -34,6 +34,17 @@ const post ={
              result[i].user_info = user_info;
              delete result[i].user_idx;
          }
+
+         for(var j in result){
+            let postIdxQuery = `SELECT * from ${table_post} WHERE post_idx='${result[j].post_idx}'`
+            let post_info = await pool.queryParam(postIdxQuery)
+            if(post_info[0].notice==1){
+                result[j].notice=true
+            }else{
+                result[j].notice=false
+            }
+         }
+
          return result;
         }catch(err){
             throw err;
@@ -52,6 +63,18 @@ const post ={
             result[i].user_info = user_info;
             delete result[i].user_idx;
         }
+
+        
+        for(var j in result){
+            let postIdxQuery = `SELECT * from ${table_post} WHERE post_idx='${result[j].post_idx}'`
+            let post_info = await pool.queryParam(postIdxQuery)
+            if(post_info[0].notice==1){
+                result[j].notice=true
+            }else{
+                result[j].notice=false
+            }
+         }
+
          return result;
         }catch(err){
             throw err;
@@ -298,10 +321,17 @@ const post ={
             throw err;
         }
     },
-    createNotice:async(userIdx,description)=>{
-        const query = `INSERT INTO notice (user_idx,description) VALUES(${userIdx},'${description}')`
+    createNotice:async(postIdx)=>{
+        const query = `SELECT * FROM ${table_post} WHERE post_idx=${postIdx}`
         try{
             const result = await pool.queryParam(query)
+            if(result[0].notice==1){
+                let changeQueryTRUE = `UPDATE ${table_post} SET notice=0 WHERE post_idx=${postIdx}`
+                const changedTRUE = await pool.queryParam(changeQueryTRUE)
+            }else{
+                let changeQueryFALSE = `UPDATE ${table_post} SET notice=1 WHERE post_idx=${postIdx}`
+                const changedFALSE = await pool.queryParam(changeQueryFALSE)
+            }
             return result.protocol41;
         }catch(err){
             throw err;

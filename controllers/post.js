@@ -230,7 +230,7 @@ const post = {
         const result = await Post.updatePostComment(post_comments_idx,description)
 
         return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.UPDATE_POST_COMMENT_SUCCESS,{
-            updated_post_comments:result
+            comments:result
         }))
     },
     deletePostComment:async(req,res)=>{
@@ -259,14 +259,9 @@ const post = {
 
     },
     createNotice:async(req,res)=>{
-        const userIdx = req.idx;
-        const {description} = req.body;
+        const postIdx = req.params.postIdx;
 
-        if(!description){
-            return res.status(statusCode.BAD_REQUEST).send(util.fail(statusCode.BAD_REQUEST,resMessage.NULL_VALUE))
-        }
-
-        const result = await Post.createNotice(userIdx,description)
+        const result = await Post.createNotice(postIdx)
 
         return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.CREATE_NOTICE_SUCCESS,{
             data:result
