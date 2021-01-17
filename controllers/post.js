@@ -171,7 +171,7 @@ const post = {
         const result = await Post.createPostComment(post_idx,userIdx,description)
 
         return res.status(statusCode.OK).send(util.success(statusCode.OK,resMessage.CREATE_POST_COMMENT_SUCCESS,{
-            inserted_post_comments:result
+            comments:result
         }))
     },
     createPostCommentLike:async(req,res)=>{
